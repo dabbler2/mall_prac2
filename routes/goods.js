@@ -1,19 +1,18 @@
 const express = require("express");
 const router = express.Router();
-const Cart = require("../schema/cart.js");
-const Goods = require("../schema/goods.js")
-
+const {Goods} = require("../models/")
 //상품 목록 조회 API
 router.get("/goods", async(req, res) => {
 	const {category} = req.query
-	const goods = await Goods.find(category? {category}:{})
+	const goods = await Goods.findAll(category? {where:{category}}:{})
 	res.json({goods});
 });
 
 // 상품 등록
 router.post("/goods", async(req,res) => {
 	const {goodsId,name,thumbnailUrl,category,price} = req.body
-	const existsGoods = await Goods.findOne({ goodsId });
+	const existsGoods = await Goods.findOne({where:{goodsId}});
+	console.log(existsGoods)
 	if (existsGoods)
 		return res.status(400).json({errorMessage: "중복임"})
 	try{
@@ -27,7 +26,7 @@ router.post("/goods", async(req,res) => {
 // 상품 상세 조회
 router.get("/goods/:goodsId", async(req, res) => {
 	const { goodsId } = req.params;
-	const existGoods = await Goods.findOne({ goodsId });
+	const existGoods = await Goods.findOne({where:{goodsId}});
 	if(!existGoods)
 		return res.status(400).json({errorMessage: "그런거 없음"})
 	res.json({goods:existGoods})

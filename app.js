@@ -5,8 +5,7 @@ const cartsRouter = require('./routes/carts')
 const registerRouter = require('./routes/users')
 const goodsRouter = require('./routes/goods')
 const cookieParser = require('cookie-parser')
-const connect = require("./schema")
-connect();
+const {sequelize} = require('./models/index.js')
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
